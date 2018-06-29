@@ -1,17 +1,10 @@
 const SlackBot = require('slackbots'),
-  axios = require('axios'),
-  Botkit = require('botkit')
+  axios = require('axios')
 
 const bot = new SlackBot({
-  token: 'xoxb-390227820583-390088537590-BhIb8iy7NEq1UgF2j5gZi7Y2',
-  name: 'jokebot'
+  token: 'xoxb-390227820583-389404942256-OQUJiVYWFrlN56RpzsOOHJ0N',
+  name: 'codette'
 })
-
-var controller = Botkit.slackbot({
-  clientId: process.env.clientId,
-  clientSecret: process.env.clientSecret,
-  scopes: ['bot'],
-});
 
 // Start handler
 bot.on('start', () => {
@@ -20,7 +13,8 @@ bot.on('start', () => {
 })
 
 // Message handling
-bot.on('direct_message', (data) => {
+bot.on('message', (data) => {
+  console.log(data)
   if (data.type !== 'message') {
     return
   }
@@ -29,12 +23,6 @@ bot.on('direct_message', (data) => {
 
 // Error handling
 bot.on('error', (err) => console.log(err))
-
-// Trigger listener
-controller.hears(['hello', 'hi'], ['direct_mention', 'mention', 'direct_message'],
-  function (bot, message) {
-    bot.reply(message, 'What up fam!')
-  })
 
 // 
 // Methods
@@ -52,10 +40,7 @@ function yoMamaAPI() {
   axios.get('http://api.yomomma.info')
     .then(res => {
       let joke = res.data.joke
-      let params = {
-        icon_emoji: ':laughing:'
-      }
-      bot.postMessageToChannel('general', `Hey! ${joke}`, params)
+      bot.postMessageToChannel('general', `Hey! ${joke}`)
     })
 }
 
@@ -63,10 +48,7 @@ function chuckNorrisAPI() {
   axios.get('http://api.icndb.com/jokes/random')
     .then(res => {
       let joke = res.data.value.joke
-      let params = {
-        icon_emoji: ':laughing:'
-      }
-      bot.postMessageToChannel('general', `Hey! ${joke}`, params)
+      bot.postMessageToChannel('general', `Hey! ${joke}`)
     })
 }
 
