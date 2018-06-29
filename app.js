@@ -6,29 +6,11 @@ const bot = new SlackBot({
   name: 'codette'
 })
 
-// Start handler
-bot.on('start', () => {
-  const params = require('./params.json')
-  bot.postMessageToChannel('general', 'BOOM!', params)
-})
+function postText(text) {
+  bot.postMessageToChannel('general', text)
+}
 
-// Message handling
-bot.on('message', (data) => {
-  console.log(data)
-  if (data.type !== 'message') {
-    return
-  }
-  handleMessage(data.text)
-})
-
-// Error handling
-bot.on('error', (err) => console.log(err))
-
-// 
-// Methods
-// 
-
-function handleMessage(msg) {
+function parseRequest(msg) {
   if (msg.includes(' jokes')) {
     randomJoke()
   } else if (msg.includes(' help')) {
@@ -36,41 +18,52 @@ function handleMessage(msg) {
   }
 }
 
-function yoMamaAPI() {
-  axios.get('http://api.yomomma.info')
+function jokeAPI(url, name) {
+  let joke
+  axios.get(url)
     .then(res => {
-      let joke = res.data.joke
-      bot.postMessageToChannel('general', `Hey! ${joke}`)
-    })
-}
-
-function chuckNorrisAPI() {
-  axios.get('http://api.icndb.com/jokes/random')
-    .then(res => {
-      let joke = res.data.value.joke
-      bot.postMessageToChannel('general', `Hey! ${joke}`)
+      switch (name) {
+        case 'yoMama':
+          joke = res.data.joke
+          break;
+        case 'chuckNorris':
+          joke = res.data.value.joke
+          break;
+      }
+      postText(`Check it: ${joke}`)
     })
 }
 
 function randomJoke() {
   let rand = Math.floor(Math.random() * 2 + 1)
+  let name, url
   if (rand === 1) {
-    yoMamaAPI()
+    name = 'yoMama'
+    url = 'http://api.yomomma.info'
   } else if (rand === 2) {
-    chuckNorrisAPI()
+    name = 'chuckNorris'
+    url = 'http://api.icndb.com/jokes/random'
   }
+  jokeAPI(url, name)
 }
 
 function helpDemo() {
-  let params = {
-    icon_emoji: ':question:'
-  }
-  bot.postMessageToChannel('general', "Type 'jokes' for a random joke, bruh!", params)
+  let helpText = "Type 'jokes' for a random joke."
+  postText(helpText)
 }
 
+// Start handler
+bot.on('start', () => {
+  postText('#blessed')
+})
 
+// Message handling
+bot.on('message', (data) => {
+  if (data.type !== 'message') {
+    return
+  }
+  parseRequest(data.text)
+})
 
-
-/* External Webhook; sends message to 'General'
-// curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
-*/
+// Error handling
+bot.on('error', (err) => console.log(err))
