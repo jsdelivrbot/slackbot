@@ -1,4 +1,4 @@
-{
+var sample = {
   type: 'message',
   user: 'UBF56FKPC',
   text: 'test',
