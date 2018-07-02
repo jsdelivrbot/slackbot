@@ -1,4 +1,5 @@
 const jokes = require('./jokes'),
+salesforce = require('./salesforce'),
   app = require('../app')
 
 function postText(text) {
@@ -10,6 +11,8 @@ function parseRequest(msg) {
     jokes.randomJoke()
   } else if (msg.includes(' help')) {
     helpDemo()
+  } else if (msg.includes(' search')){
+    salesforce.search(msg)
   }
 }
 
