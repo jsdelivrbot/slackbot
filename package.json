@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "botkit": "^0.6.14",
+    "dotenv": "^6.0.0",
     "https": "^1.0.0",
     "nforce": "^1.10.0",
     "querystring": "^0.2.0",

@@ -1,63 +1,56 @@
-'use strict';
+"use strict";
+require("dotenv").config();
 
-let http = require('http'),
-  actions = require('./actions/chat'),
-  salesforce = require('./actions/salesforce'),
-  SlackBot = require('slackbots');
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN,
+  // Botkit constructor
+  Botkit = require("botkit"),
+  formatter = require("./actions/slack-formatter"),
+  salesforce = require("./actions/salesforce"),
+  controller = Botkit.slackbot(),
+  bot = controller.spawn({
+    token: SLACK_BOT_TOKEN
+  });
 
-const SLACK_BOT_TOKEN =
-  'xoxb-390227820583-389404942256-OQUJiVYWFrlN56RpzsOOHJ0N'; //process.env.SLACK_BOT_TOKEN;
-
-// // botkit version
-// let Botkit = require('botkit'),
-//   formatter = require('./actions/slack-formatter'),
-//   salesforce = require('./actions/salesforce'),
-//   controller = Botkit.slackbot(),
-//   bot = controller.spawn({
-//     token: SLACK_BOT_TOKEN
-//   });
-
-// bot.startRTM(err => {
-//   if (err) {
-//     throw new Error('Could not connect to Slack');
-//   }
-// });
-
-// controller.hears(
-//   ['help'],
-//   'direct_message,direct_mention,mention',
-//   (bot, message) => {
-//     bot.reply(message, {
-//       text: `You can ask me things like:
-//     "Search account Acme" or "Search Acme in acccounts"
-//     "Search contact Lisa Smith" or "Search Lisa Smith in contacts"
-//     "Search opportunity Big Deal"
-//     "Create contact"
-//     "Create case"`
-//     });
-//   }
-// );
-
-const bot = new SlackBot({
-  token: SLACK_BOT_TOKEN,
-  name: 'codette'
-});
-
-// Start handler
-bot.on('start', () => {
-  actions.postText('#blessed');
-  salesforce.auth();
-});
-
-// Message handling
-bot.on('message', data => {
-  if (data.type !== 'message') {
-    return;
+bot.startRTM(err => {
+  if (err) {
+    throw new Error("Could not connect to Slack");
   }
-  actions.parseRequest(data.text);
+  if (!err) {
+    console.log("Ready.");
+  }
 });
 
-// Error handling
-bot.on('error', err => console.log(err));
-
-module.exports.bot = bot;
+controller.hears(
+  ["(.*)"],
+  "direct_message,direct_mention,mention",
+  (bot, message) => {
+    let subject, description;
+    let askSubject = (response, convo) => {
+      convo.ask("What's the subject?", (response, convo) => {
+        subject = response.text;
+        askDescription(response, convo);
+        convo.next();
+      });
+    };
+    let askDescription = (response, convo) => {
+      convo.ask("Enter a description for the case", (response, convo) => {
+        description = response.text;
+        salesforce
+          .createCase({ subject: subject, description: description })
+          .then(_case => {
+            bot.reply(message, {
+              text: "I created the case:",
+              attachments: formatter.formatCase(_case)
+            });
+            convo.next();
+          })
+          .catch(error => {
+            bot.reply(message, error);
+            convo.next();
+          });
+      });
+    };
+    bot.reply(message, "OK, I can help you with that!");
+    bot.startConversation(message, askSubject);
+  }
+);

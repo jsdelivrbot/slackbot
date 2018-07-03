@@ -1,25 +1,29 @@
-const jokes = require('./jokes'),
-salesforce = require('./salesforce'),
-  app = require('../app')
+const jokes = require("./jokes"),
+  salesforce = require("./salesforce"),
+  formatter = require("./slack-formatter");
 
-function postText(text) {
-  app.bot.postMessageToChannel('general', text)
-}
+// function postText(text) {
+//   app.bot.postMessageToChannel("general", text);
+// }
 
 function parseRequest(msg) {
-  if (msg.includes(' jokes')) {
-    jokes.randomJoke()
-  } else if (msg.includes(' help')) {
-    helpDemo()
-  } else if (msg.includes(' search')){
-    salesforce.search(msg)
+  console.log("Parsing!!");
+  if (msg.includes(" jokes")) {
+    jokes.randomJoke();
+  } else if (msg.includes(" help")) {
+    helpDemo();
+  } else if (msg.includes(" search")) {
+    let name = message.match[1];
+    salesforce
+      .findContact(name)
+      .then(contacts =>
+        bot.reply(message, {
+          text: "I found these contacts matching  '" + name + "':",
+          attachments: formatter.formatContacts(contacts)
+        })
+      )
+      .catch(error => bot.reply(message, error));
   }
 }
 
-function helpDemo() {
-  let helpText = "Type 'jokes' for a random joke."
-  postText(helpText)
-}
-
-module.exports.postText = postText
-module.exports.parseRequest = parseRequest
+module.exports.parseRequest = parseRequest;
