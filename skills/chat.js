@@ -25,6 +25,7 @@ const jokes = require("./jokes"),
 //       .catch(error => bot.reply(message, error));
 //   }
 // };
+
 module.exports = function(controller) {
   controller.config.help.push({
     "name": "New Ticket",
