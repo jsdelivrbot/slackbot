@@ -12,11 +12,12 @@ const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN,
   });
 
 bot.startRTM(err => {
-  if (err) {
+  err => {
     throw new Error("Could not connect to Slack");
-  }
+    console.log(err)
+  };
   if (!err) {
-    console.log("Ready.");
+    console.log("Connected to Slack.");
   }
 });
 
@@ -36,7 +37,7 @@ controller.hears(
       convo.ask("Enter a description for the case", (response, convo) => {
         description = response.text;
         salesforce
-          .createCase({ subject: subject, description: description })
+          .createCase({ subject: subject, description: description, user:message.user })
           .then(_case => {
             bot.reply(message, {
               text: "I created the case:",
@@ -50,7 +51,7 @@ controller.hears(
           });
       });
     };
-    bot.reply(message, "OK, I can help you with that!");
+    bot.reply(message, "Let's create a new ticket!");
     bot.startConversation(message, askSubject);
   }
 );
