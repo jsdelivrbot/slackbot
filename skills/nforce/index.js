@@ -1,14 +1,11 @@
 var request = require("request");
 var promises = require("./lib/promises");
 var qs = require("querystring");
-var url = require("url");
 var Record = require("./lib/record");
 var FDCStream = require("./lib/fdcstream");
 var util = require("./lib/util");
 var errors = require("./lib/errors");
 var multipart = require("./lib/multipart");
-var faye = require("faye");
-var mime = require("mime");
 var zlib = require("zlib");
 var _ = require("lodash");
 
@@ -494,16 +491,16 @@ Connection.prototype.insert = function(data, callback) {
   var type = opts.sobject.getType();
   opts.resource = "/sobjects/" + type;
   opts.method = "POST";
-  if (
-    type === "document" ||
-    type === "attachment" ||
-    type === "contentversion"
-  ) {
-    opts.multipart = multipart(opts);
-  } else {
+  // if (
+  //   type === "document" ||
+  //   type === "attachment" ||
+  //   type === "contentversion"
+  // ) {
+  //   opts.multipart = multipart(opts);
+  // } else {
     opts.body = JSON.stringify(opts.sobject._getPayload(false));
     debug("---> Opts Body: ", opts.body);
-  }
+  // }
   return this._apiRequest(opts, opts.callback);
 };
 
@@ -513,15 +510,15 @@ Connection.prototype.update = function(data, callback) {
   var id = opts.sobject.getId();
   opts.resource = "/sobjects/" + type + "/" + id;
   opts.method = "PATCH";
-  if (
-    type === "document" ||
-    type === "attachment" ||
-    type === "contentversion"
-  ) {
-    opts.multipart = multipart(opts);
-  } else {
+  // if (
+  //   type === "document" ||
+  //   type === "attachment" ||
+  //   type === "contentversion"
+  // ) {
+  //   opts.multipart = multipart(opts);
+  // } else {
     opts.body = JSON.stringify(opts.sobject._getPayload(true));
-  }
+  // }
   return this._apiRequest(opts, opts.callback);
 };
 
@@ -1015,14 +1012,14 @@ Connection.prototype._apiRequest = function(opts, callback) {
   }
 
   // set content-type
-  if (opts.multipart) {
-    ropts.headers["content-type"] = "multipart/form-data";
-    ropts.multipart = opts.multipart;
-    ropts.preambleCRLF = true;
-    ropts.postambleCRLF = true;
-  } else {
+  // if (opts.multipart) {
+  //   ropts.headers["content-type"] = "multipart/form-data";
+  //   ropts.multipart = opts.multipart;
+  //   ropts.preambleCRLF = true;
+  //   ropts.postambleCRLF = true;
+  // } else {
     ropts.headers["content-type"] = "application/json";
-  }
+  // }
 
   // set additional user-supplied headers
   if (opts.headers) {
@@ -1148,17 +1145,17 @@ Connection.prototype._apiRequest = function(opts, callback) {
       }
     }
 
-    // check for gzip compression
-    if (res.headers && res.headers["content-encoding"] === "gzip" && body) {
-      //  response is compressed - decompress it
-      zlib.gunzip(body, function(err, decompressed) {
-        if (err) return resolver.reject(err);
-        body = decompressed;
-        processResponse();
-      });
-    } else {
-      processResponse();
-    }
+    // // check for gzip compression
+    // if (res.headers && res.headers["content-encoding"] === "gzip" && body) {
+    //   //  response is compressed - decompress it
+    //   zlib.gunzip(body, function(err, decompressed) {
+    //     if (err) return resolver.reject(err);
+    //     body = decompressed;
+    //     processResponse();
+    //   });
+    // } else {
+    processResponse();
+    // }
   });
 
   return resolver.promise;

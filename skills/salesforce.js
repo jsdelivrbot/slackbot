@@ -17,6 +17,8 @@ const nforce = require("./nforce"),
 
 var oauth;
 
+// separate channel for escalation notifications
+
 function createCase(newCase) {
   return new Promise((resolve, reject) => {
     let c = nforce.createSObject("Case");
