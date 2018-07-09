@@ -1,0 +1,27 @@
+{
+  "SIM": {
+    "name": "Spireon Incident Management",
+    "key": "SIM",
+    "id": "10227",
+    "ticketfields": {
+      "0": {
+        "name": "Subject",
+        "value": "summary",
+        "placeholder": "Summarize the ticket",
+        "fields": {},
+        "optional": "false",
+        "default": "",
+        "type": "text"
+      },
+      "1": {
+        "name": "Description",
+        "value": "description",
+        "placeholder": "Enter ALL the THINGS...",
+        "fields": {},
+        "optional": "false",
+        "default": "",
+        "type": "textarea"
+      }
+    }
+  }
+}

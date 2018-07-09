@@ -1,0 +1,25 @@
+# Environment Config for Invitae
+
+# store your secrets and config variables in here
+# only invited collaborators will be able to see your .env values
+# reference these in your code with process.env.SECRET
+
+DEBUG="botkit:*"
+
+MONGO_URI=mongodb://opsbot-invitae:ndgDo26uSZ3RvJgwNCYA@mongodb-default.c.slackbot-204123.internal:27017/opsbot-invitae
+clientId=3MVG9AJuBE3rTYDg8cnWQK_PLHQW91c6wWl95D6Pn.3OuqzJ1GtdEkifzyrVjadN50rcBkA2O2BiUIIFwU7Sz
+SF_CLIENT_ID=3MVG9AJuBE3rTYDg8cnWQK_PLHQW91c6wWl95D6Pn.3OuqzJ1GtdEkifzyrVjadN50rcBkA2O2BiUIIFwU7Sz
+clientSecret=3002508663153639280
+PORT=8080
+SMTPPORT=587
+SMTPUSER=AKIAJJT3LNTHGE7C4DAQ
+SMTPPASSWD=ApvDx8xSUUqLGW+9fX+koXZztPRp0G46F4QH82iVdPvq
+appUrl=https://invitae-dot-slackbot-204123.appspot.com
+clientData=envfiles/clientData.json
+ticketBackend=salesforce
+SF_URL = https://test.salesforce.com/services/oauth2/token
+SF_USER_NAME = invitaeslack@taos.com.invitae
+SF_PASSWORD = ypkHJrX$*X2nG$_Q7RJRH*s9!
+SF_REDIRECT_URI=/oauth/_callback
+NODE_TLS_REJECT_UNAUTHORIZED=0
+SLACK_BOT_TOKEN=xoxb-390227820583-389404942256-OQUJiVYWFrlN56RpzsOOHJ0N

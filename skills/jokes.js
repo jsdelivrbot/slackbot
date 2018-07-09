@@ -1,5 +1,4 @@
-const axios = require('axios'),
-  actions = require('./chat')
+const axios = require('axios')
 
 function jokeAPI(url, name) {
   let joke
