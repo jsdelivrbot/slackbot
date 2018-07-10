@@ -1,11 +1,10 @@
 "use strict";
 
-const nforce = require("nforce");
-
-// SF_CLIENT_ID = process.env.SF_CLIENT_ID,
-// SF_CLIENT_SECRET = process.env.SF_CLIENT_SECRET,
-// SF_USER_NAME = process.env.SF_USER_NAME,
-// SF_PASSWORD = process.env.SF_PASSWORD
+const nforce = require("nforce"),
+  // SF_CLIENT_ID = process.env.SF_CLIENT_ID,
+  // SF_CLIENT_SECRET = process.env.SF_CLIENT_SECRET,
+  SF_USER_NAME = process.env.SF_USER_NAME,
+  SF_PASSWORD = process.env.SF_PASSWORD;
 
 // console.log(`Client ID: ${SF_CLIENT_ID}\nClient Secret: ${SF_CLIENT_SECRET}`)
 module.exports = (message, controller) => {
@@ -17,10 +16,11 @@ module.exports = (message, controller) => {
     mode: "single",
     autoRefresh: true
   });
-console.log(controller)
-  var oauth = soauth()
-  
-  soauth = () => {
+  console.log(controller);
+  var oauth = soauth();
+
+  //soauth = () => {
+  function soauth() {
     console.log("Authenticating with Salesforce");
     org.authenticate(
       { username: SF_USER_NAME, password: SF_PASSWORD },
@@ -32,13 +32,14 @@ console.log(controller)
           console.log("--> authenticated!");
           oauth = resp;
           console.log(resp);
-          createCase(message)
+          createCase(message);
         }
       }
     );
   }
 
-  createCase = message => {
+  // createCase = message => {
+    function createCase(message) {
     return new Promise((resolve, reject) => {
       let c = nforce.createSObject("Case");
       c.set("u_int_type", "Invitae New Ticket");

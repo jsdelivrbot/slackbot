@@ -4,7 +4,7 @@
 # only invited collaborators will be able to see your .env values
 # reference these in your code with process.env.SECRET
 
-DEBUG="botkit:*"
+DEBUG="*:*"
 
 MONGO_URI=mongodb://opsbot-invitae:ndgDo26uSZ3RvJgwNCYA@mongodb-default.c.slackbot-204123.internal:27017/opsbot-invitae
 clientId=3MVG9AJuBE3rTYDg8cnWQK_PLHQW91c6wWl95D6Pn.3OuqzJ1GtdEkifzyrVjadN50rcBkA2O2BiUIIFwU7Sz

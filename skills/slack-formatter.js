@@ -1,5 +1,15 @@
 "use strict";
 
+module.exports = function(controller) {
+  controller.config.help.push({
+    "name": "Status",
+    "help":{
+      "ping": "Test if OpsBot is listening. Should receive a *Pong!* response.",
+      "marco": "Test if OpsBot is listening. Should receive a *Polo!* response.",
+      "uptime": "Check OpsBot uptime and stats."
+    }
+  });
+
 let color = "#009cdb";
 
 let formatAccounts = accounts => {
@@ -173,3 +183,4 @@ exports.formatContact = formatContact;
 exports.formatOpportunities = formatOpportunities;
 
 exports.formatCase = formatCase;
+}

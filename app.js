@@ -1,10 +1,9 @@
 "use strict";
 
-var env = require('node-env-file');
-env(__dirname + '/envfiles/envVars');
+var env = require("node-env-file");
+env(__dirname + "/envfiles/envVars");
 
-const listener = require("./skills/new-ticket_support-channel"),
-  Botkit = require("botkit"),
+const Botkit = require("botkit"),
   SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
 
 var bot_options = {
@@ -16,6 +15,7 @@ var bot_options = {
   },
   controller = Botkit.slackbot(bot_options),
   bot = controller.spawn({ token: SLACK_BOT_TOKEN });
+// webserver = require(__dirname + "/components/express_webserver.js")(    controller  );
 
 bot.startRTM(err => {
   err => {
@@ -27,4 +27,11 @@ bot.startRTM(err => {
   }
 });
 
-listener(controller);
+// Load all skills
+const normalizedPath = require("path").join(__dirname, "skills");
+
+require("fs")
+  .readdirSync(normalizedPath)
+  .forEach(function(file) {
+    require(`${normalizedPath}/${file}`)(controller);
+  });
