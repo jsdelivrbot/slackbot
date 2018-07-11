@@ -14,8 +14,10 @@ var bot_options = {
     scopes: ["bot"]
   },
   controller = Botkit.slackbot(bot_options),
-  bot = controller.spawn({ token: SLACK_BOT_TOKEN });
-// webserver = require(__dirname + "/components/express_webserver.js")(    controller  );
+  bot = controller.spawn({ token: SLACK_BOT_TOKEN }),
+  webserver = require(__dirname + "/components/express_webserver.js")(
+    controller
+  );
 
 bot.startRTM(err => {
   err => {

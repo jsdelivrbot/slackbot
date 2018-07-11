@@ -27,12 +27,6 @@ module.exports = function(controller) {
   webserver.set("view engine", "hbs");
   webserver.set("views", __dirname + "/../views/");
 
-  // import express middlewares that are present in /components/express_middleware
-  //var normalizedPath = require("path").join(__dirname, "express_middleware");
-  //require("fs").readdirSync(normalizedPath).forEach(function(file) {
-  //    require("./express_middleware/" + file)(webserver, controller);
-  //});
-
   webserver.use(express.static("public"));
 
   var server = http.createServer(webserver);
@@ -51,9 +45,9 @@ module.exports = function(controller) {
   require("fs")
     .readdirSync(normalizedPath)
     .forEach(function(file) {
-      if (fs.statSync(`${normalizedPath}/${files}`).isFile()) {
-        require(`${normalizedPath}/${files}`)(webserver, controller);
-      }
+     // if (fs.statSync(`${normalizedPath}/${file}`).isFile()) {
+        require(`${normalizedPath}\\${file}`)(webserver, controller);
+     // }
     });
 
   controller.webserver = webserver;
