@@ -8,7 +8,7 @@ app.post(
     res.status(200).end(); // best practice to respond with empty 200 status code
     var reqBody = req.body;
     var responseURL = reqBody.response_url;
-    if (reqBody.token != YOUR_APP_VERIFICATION_TOKEN) {
+    if (reqBody.token != process.env.SLACK_BOT_TOKEN) {
       res.status(403).end("Access forbidden");
     } else {
       var message = {
