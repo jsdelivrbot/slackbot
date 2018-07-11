@@ -1,6 +1,10 @@
 "use strict";
-
-var env = require("node-env-file");
+var express = require("express");
+var request = require("request");
+var bodyParser = require("body-parser");
+var app = express();
+var urlencodedParser = bodyParser.urlencoded({ extended: false }),
+  env = require("node-env-file");
 env(__dirname + "/envfiles/envVars");
 
 const Botkit = require("botkit"),
@@ -14,10 +18,7 @@ var bot_options = {
     scopes: ["bot"]
   },
   controller = Botkit.slackbot(bot_options),
-  bot = controller.spawn({ token: SLACK_BOT_TOKEN }),
-  webserver = require(__dirname + "/components/express_webserver.js")(
-    controller
-  );
+  bot = controller.spawn({ token: SLACK_BOT_TOKEN });
 
 bot.startRTM(err => {
   err => {

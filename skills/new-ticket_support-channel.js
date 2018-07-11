@@ -13,8 +13,18 @@ module.exports = function(controller) {
       nt: "Opens the ticket creation dialog. This is the shorthand command."
     }
   });
-  
-  const hearingAid = ['((fix|make|create|open|new) )((a|an|all) )?((the|new) )?(things|ticket|incident|inc|problem|issue)', '^nt$']
+
+  const hearingAid = [
+      "((fix|make|create|open|new) )((a|an|all) )?((the|new) )?(things|ticket|incident|inc|problem|issue)",
+      "^nt$"
+    ],
+    directSubmit = ["new"];
+
+  controller.hears(
+    directSubmit,
+    "direct_message,direct_mention,mention",
+    (bot, message) => {}
+  );
 
   controller.hears(
     hearingAid,
@@ -30,7 +40,7 @@ module.exports = function(controller) {
             attachments: [
               {
                 title: "Would you like to create a ticket?",
-                callback_id: "createTicketPrompt",
+                callback_id: "createTicketDialog",
                 attachment_type: "default",
                 actions: []
               }
@@ -227,12 +237,12 @@ module.exports = function(controller) {
     }
   });
 
-  controller.on('interactive_message_callback', function(bot, message){
-    debug('Interactive message callback triggered');
+  controller.on("interactive_message_callback", function(bot, message) {
+    debug("Interactive message callback triggered");
 
-    switch(message.callback_id){
-      case 'createTicketPrompt':
-        controller.trigger('createTicketDialog', [bot, message]);
+    switch (message.callback_id) {
+      case "createTicketPrompt":
+        controller.trigger("createTicketDialog", [bot, message]);
         break;
     }
   });
