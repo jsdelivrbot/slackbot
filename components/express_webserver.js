@@ -22,7 +22,7 @@ module.exports = function(controller) {
   );
 
   webserver.use(express.static("public"));
-  webserver.use("/", buttonTest);
+  webserver.use("/slack/slash-commands/send-me-buttons", buttonTest);
 
   // // set up handlebars ready for tabs
   // webserver.engine(
