@@ -46,7 +46,7 @@ module.exports = function(controller) {
     .readdirSync(normalizedPath)
     .forEach(function(file) {
      // if (fs.statSync(`${normalizedPath}/${file}`).isFile()) {
-        require(`${normalizedPath}\\${file}`)(webserver, controller);
+        require(`${normalizedPath}/${file}`)(webserver, controller);
      // }
     });
 
